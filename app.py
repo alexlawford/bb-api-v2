@@ -111,8 +111,8 @@ auth = HTTPTokenAuth(scheme='Bearer')
 
 @auth.verify_token
 def verify_token(token):
-    print(token)
-    if sha256(token) == '5a1f0fde509903160bd69a04fd513bdb0eb09a333bfc2515e7d48874c9ed8173':
+    hash = sha256(token.encode('utf-8'))
+    if hash == '5a1f0fde509903160bd69a04fd513bdb0eb09a333bfc2515e7d48874c9ed8173':
         return True
     else:
         return False
