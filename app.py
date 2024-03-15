@@ -4,7 +4,7 @@ import time
 import base64
 from io import BytesIO
 import datetime
-from hashlib import sha256
+from hashlib import sha256, secrets
 
 # Packages
 import torch
@@ -111,10 +111,8 @@ auth = HTTPTokenAuth(scheme='Bearer')
 
 @auth.verify_token
 def verify_token(token):
-    hash = sha256(token.encode('utf-8'))
-    print(hash)
-    return True
-    if hash == '5a1f0fde509903160bd69a04fd513bdb0eb09a333bfc2515e7d48874c9ed8173':
+    hash = sha256(str.encode(token)).digest()
+    if secrets.compare_digest(hash, b'Z\x1f\x0f\xdeP\x99\x03\x16\x0b\xd6\x9a\x04\xfdQ;\xdb\x0e\xb0\x9a3;\xfc%\x15\xe7\xd4\x88t\xc9\xed\x81s'):
         return True
     else:
         return False
