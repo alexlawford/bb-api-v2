@@ -33,9 +33,9 @@ def download_file(url, directory):
 
 # Download and save files
 files = [
-    'https://s3.us-west-1.wasabisys.com/bb-weights/queratograySketch_v10.safetensors?AWSAccessKeyId=DNT3E0UF8EO54ZBU6TSO&Expires=1710492556&Signature=UVe5KepdlLJhWAF%2BLJApjVvcpQ8%3D',
-    'https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth?AWSAccessKeyId=DNT3E0UF8EO54ZBU6TSO&Expires=1710492574&Signature=cjblw4uLrYkhUWmlp3NZjq5o9sg%3D',
-    'https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth.lock?AWSAccessKeyId=DNT3E0UF8EO54ZBU6TSO&Expires=1710492681&Signature=qKCVr6Iw2WGL25HUkfKHmfs8uJ4%3D'
+    'https://s3.us-west-1.wasabisys.com/bb-weights/queratograySketch_v10.safetensors?AWSAccessKeyId=VS5MX21PCITBK8P64DXI&Expires=1710496992&Signature=U72G0G5Z8ehHE90SQuZRg%2F%2F4fH4%3D',
+    'https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth?AWSAccessKeyId=VS5MX21PCITBK8P64DXI&Expires=1710496908&Signature=PXTmObyL%2FBUId8lBp%2F40OnyL0w8%3D',
+    'https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth.lock?AWSAccessKeyId=VS5MX21PCITBK8P64DXI&Expires=1710496927&Signature=KbWSHmzHIMALGpkdt%2FVGjIXg2sE%3D'
 ]
 
 print("Downloading\n")
