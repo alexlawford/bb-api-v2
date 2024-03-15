@@ -65,7 +65,7 @@ def generate():
 
     ## Text Embeddings
     compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
-    prompt_01 = "young man turning around, suprised, (sketch artstyle)---, graycale, monochrome, solo"
+    prompt_01 = "young man turning around, suprised, sketch artstyle, graycale, monochrome, solo"
     prompt_embeds_01 = compel(prompt_01)
     negative_prompt = "glasses----, (extra fingers), (fewer fingers), (low quality), (worst quality), (bad anatomy), (inaccurate limb), (ugly eyes), (inaccurate eyes), (extra digit), (fewer digits), (extra arms), (extra navel), blurred, (out of focus), soft, deformed, watermark, (movie poster), (large breasts), (censored), (mosaic censoring), (piercings), (multiple), error, cropped, (low res), artifacts, (compression artifacts), ugly, duplicate, morbid, mutilated, disfigured, gross, malformed, missing, username, signature, faded" 
     negative_prompt_embeds = compel(negative_prompt)
