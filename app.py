@@ -2,9 +2,10 @@
 import platform
 import time
 import base64
-from io import BytesIO
 import datetime
-from hashlib import sha256, secrets
+import secrets
+from io import BytesIO
+from hashlib import sha256
 
 # Packages
 import torch
