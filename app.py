@@ -58,8 +58,8 @@ def generate():
     ).to(device)
 
     # Control Nets
-    scribble = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble").to(device)
-    openpose = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose").to(device)
+    scribble = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble", torch_dtype=torch_dtype).to(device)
+    openpose = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose", torch_dtype=torch_dtype).to(device)
 
     ## Text Embeddings
     compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
