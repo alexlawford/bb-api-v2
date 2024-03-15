@@ -12,5 +12,6 @@ opencv-python
 matplotlib
 flask
 flask_restful
+flask_httpauth
 gunicorn
 xformers

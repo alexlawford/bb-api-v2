@@ -4,12 +4,14 @@ import time
 import base64
 from io import BytesIO
 import datetime
+from hashlib import sha256
 
 # Packages
 import torch
 import requests
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_httpauth import HTTPTokenAuth
 from PIL import Image
 from diffusers import ControlNetModel
 from compel import Compel
@@ -105,8 +107,17 @@ def generate():
 
 app = Flask(__name__)
 api = Api(app)
+auth = HTTPTokenAuth(scheme='Bearer')
 
+@auth.verifytoken
+def verify(token):
+    if sha256(token) == '5a1f0fde509903160bd69a04fd513bdb0eb09a333bfc2515e7d48874c9ed8173':
+        return True
+    else:
+        return False
+    
 class Predict(Resource):
+    @auth.login_required
     def post(self):
         time_start = time.time()
 
@@ -128,6 +139,10 @@ class Predict(Resource):
         return result.json()
 
 api.add_resource(Predict, "/")
+
+@auth.error_handler
+def auth_error():
+    return "Access Denied", 403
 
 # # Settings
 # model = "queratograySketch_v10.safetensors"
