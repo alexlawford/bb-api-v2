@@ -1,0 +1,16 @@
+diffusers[torch]
+pillow
+accelerate
+transformers
+numpy
+scipy
+torchvision
+compel
+peft
+git+https://github.com/sberbank-ai/Real-ESRGAN.git
+opencv-python
+matplotlib
+flask
+flask_restful
+gunicorn
+xformers
