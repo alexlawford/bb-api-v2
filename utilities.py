@@ -1,7 +1,7 @@
 from diffusers.utils import scale_lora_layers, unscale_lora_layers
 from diffusers.utils.torch_utils import randn_tensor
 
-from typing import Type, Literal
+from typing import Type, Literal, Tuple
 from PIL import Image
 import numpy as np
 
@@ -89,7 +89,7 @@ class Utilities:
     def prepare_mask(
         self,
         mask: Type[Image.Image],
-        dest_size: tuple[float, float],
+        dest_size: Tuple[float, float],
         device: str
     ):
         mask = mask.convert("L")
