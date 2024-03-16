@@ -1,7 +1,7 @@
 from diffusers.utils import scale_lora_layers, unscale_lora_layers
 from diffusers.utils.torch_utils import randn_tensor
 
-from typing import Type, Literal, Tuple
+from typing import Type, Literal, Tuple, Optional
 from PIL import Image
 import numpy as np
 
@@ -12,18 +12,21 @@ class Layer:
         self,
         prompt_embeds: Type[torch.FloatTensor],
         negative_prompt_embeds: Type[torch.FloatTensor],
-        control_image: Type[Image.Image],
-        mask: Type[Image.Image],
-        controlnet_name: Literal['openpose', 'scribble']
+        control_image: Optional[Type[Image.Image]] = None,
+        mask: Optional[Type[Image.Image]] = None,
+        controlnet_name: Optional[Literal['openpose', 'scribble']] = None
     ) -> None:
         self.prompt_embeds = prompt_embeds
         self.negative_prompt_embeds = negative_prompt_embeds
-        self.control_image = control_image
-        self.mask = mask
-        self.controlnet_name = controlnet_name
 
-# Do classifeier free guidance always TRUE
-# Enforce 1 batch size and 1 image per prompt
+        if control_image is not None:
+            self.control_image = control_image
+
+        if mask is not None:
+            self.mask = mask
+
+        if controlnet_name is not None:
+            self.controlnet_name = controlnet_name
 
 class Utilities:
 
