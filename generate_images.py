@@ -40,8 +40,8 @@ def execute_pipeline(layers, pipe, controlnets, device):
         controlnets=controlnets,
         generator=generator,
         lora_scale=0.2,
-        guidance_scale=9.0,
-        controlnet_conditioning_scale=0.95
+        guidance_scale=8.0,
+        controlnet_conditioning_scale=0.9
     )[0]
 
     # Upscale & Enhance
