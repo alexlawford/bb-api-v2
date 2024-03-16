@@ -84,7 +84,7 @@ def generate(layers_raw):
             prompt_embeds=prompt_embeds,
             negative_prompt_embeds=negative_prompt_embeds,
             control_image=decode_base64_image(layer["control"]),
-            mask=Image.open(layer["mask"]),
+            mask=decode_base64_image(layer["mask"]),
             controlnet_name=layer["type"]
         )
         layers.append(l)
