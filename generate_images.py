@@ -78,7 +78,7 @@ def generate(layers_raw):
 
     for layer in layers_raw:
 
-        prompt_embeds, negative_prompt_embeds = generate_prompt_embeds(layer["prompt"], layer["negative prompt"], pipe)
+        prompt_embeds, negative_prompt_embeds = generate_prompt_embeds(layer["prompt"], layer["negative_prompt"], pipe)
 
         l = Layer(
             prompt_embeds=prompt_embeds,
