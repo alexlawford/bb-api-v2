@@ -1,7 +1,7 @@
 import os
 import requests
 
-def download_file(url, directory):
+def download_file(url, file_name, directory):
     """
     Download a file from the given URL and save it into the specified directory.
     
@@ -15,10 +15,7 @@ def download_file(url, directory):
 
     # Make dir if it doesn't exist
     os.makedirs(directory, exist_ok=True)
-    
-    # Get the file name from the URL
-    file_name = url.split('/')[-1]
-    
+        
     # Path
     save_path = os.path.join(directory, file_name)
     
@@ -33,13 +30,13 @@ def download_file(url, directory):
 
 # Download and save files
 files = [
-    'https://s3.us-west-1.wasabisys.com/bb-weights/queratograySketch_v10.safetensors?AWSAccessKeyId=VS5MX21PCITBK8P64DXI&Expires=1710496992&Signature=U72G0G5Z8ehHE90SQuZRg%2F%2F4fH4%3D',
-    'https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth?AWSAccessKeyId=VS5MX21PCITBK8P64DXI&Expires=1710496908&Signature=PXTmObyL%2FBUId8lBp%2F40OnyL0w8%3D',
-    'https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth.lock?AWSAccessKeyId=VS5MX21PCITBK8P64DXI&Expires=1710496927&Signature=KbWSHmzHIMALGpkdt%2FVGjIXg2sE%3D'
+    ('https://s3.us-west-1.wasabisys.com/bb-weights/queratograySketch_v10.safetensors?AWSAccessKeyId=000R8RBVN2HP618VW0U4&Expires=1710558861&Signature=xYiwZVL%2FAT7rInb5%2F9Iq4qi2D6E%3D', 'queratograySketch_v10.safetensors'),
+    ('https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth?AWSAccessKeyId=000R8RBVN2HP618VW0U4&Expires=1710558893&Signature=PDVDoWN%2B2dSxsrjvJPpHmZP4gnM%3D', 'RealESRGAN_x2.pth'),
+    ('https://s3.us-west-1.wasabisys.com/bb-weights/RealESRGAN_x2.pth.lock?AWSAccessKeyId=000R8RBVN2HP618VW0U4&Expires=1710558909&Signature=Z4jXfMqp%2FOLOXtCtZwX77JqWzMA%3D', 'RealESRGAN_x2.pth.lock')
 ]
 
 print("Downloading\n")
 
-for url in files:
-    downloaded_file_path = download_file(url, 'weights')
+for url, file_name in files:
+    downloaded_file_path = download_file(url, file_name, 'weights')
     print(f"File downloaded and saved to: {downloaded_file_path}")
