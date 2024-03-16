@@ -40,8 +40,9 @@ class Predict(Resource):
 
         req = request.json
         layers=req.get("layers")
+        variation=req.get("variation")
 
-        image = generate(layers)
+        image = generate(layers, variation)
 
         with BytesIO() as image_binary:
             image.save(image_binary, "png")

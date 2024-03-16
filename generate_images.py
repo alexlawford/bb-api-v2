@@ -32,8 +32,8 @@ def generate_prompt_embeds(prompt, negative_prompt, pipe):
     compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
     return compel(prompt + standard_positive), compel(negative_prompt + standard_negative)
 
-def execute_pipeline(layers, pipe, controlnets, device):
-    generator = torch.Generator(device=device).manual_seed(2)
+def execute_pipeline(layers, pipe, controlnets, device, variation):
+    generator = torch.Generator(device=device).manual_seed(variation)
 
     image = pipe(
         layers=layers,
@@ -71,7 +71,7 @@ def setup_pipe(device, torch_dtype):
     return pipe, {"scribble" : scribble, "openpose" : openpose}
 
 
-def generate(layers_raw):
+def generate(layers_raw, variation):
     pipe, controlnets = setup_pipe("cuda", torch.float16)
 
     layers = []
@@ -95,7 +95,7 @@ def generate(layers_raw):
             )
         layers.append(l)
     
-    return execute_pipeline(layers, pipe, controlnets, "cuda")
+    return execute_pipeline(layers, pipe, controlnets, "cuda", variation)
 
 # # Settings
 # lora = "none"
