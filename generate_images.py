@@ -53,7 +53,7 @@ def execute_pipeline(layers, pipe, controlnets, device):
 
     return resized
 
-def setup_pipe(device, torch_dtype, variant):
+def setup_pipe(device, torch_dtype):
     ## Weights
     checkpoint = "queratograySketch_v10.safetensors"
 
@@ -61,19 +61,18 @@ def setup_pipe(device, torch_dtype, variant):
     pipe = BlendedControlNetPipeline.from_single_file(
         "./weights/" + checkpoint,
         torch_dtype=torch_dtype,
-        use_safetensors=True,
-        variant=variant
+        use_safetensors=True
     ).to(device)
 
     # Control Nets
-    scribble = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble", torch_dtype=torch_dtype, variant=variant).to(device)
-    openpose = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose", torch_dtype=torch_dtype, variant=variant).to(device)
+    scribble = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-scribble", torch_dtype=torch_dtype).to(device)
+    openpose = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-openpose", torch_dtype=torch_dtype).to(device)
 
     return pipe, {"scribble" : scribble, "openpose" : openpose}
 
 
 def generate(layers_raw):
-    pipe, controlnets = setup_pipe("cuda", torch.float16, "fp16")
+    pipe, controlnets = setup_pipe("cuda", torch.float16)
 
     layers = []
 
