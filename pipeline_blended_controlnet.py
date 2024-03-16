@@ -194,7 +194,7 @@ class BlendedControlNetPipeline(
                     latents = self.scheduler.step(noise_pred, t, latents, return_dict=False)[0]
 
                     # Blend layers according to mask
-                    if layer_index != 0:
+                    if layer_index != 0 and layer_index < (num_inference_steps - 4):
                         # Add noise to bg
                         ennoised_bg = self.scheduler.add_noise(
                             bg_latents, init_latents, t

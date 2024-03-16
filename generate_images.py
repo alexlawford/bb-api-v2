@@ -27,7 +27,7 @@ def decode_base64_image(image_string):
     return rgb
 
 def generate_prompt_embeds(prompt, negative_prompt, pipe):
-    standard_positive = ", sketch artstyle, (high quality), (best quality), masterpiece"
+    standard_positive = ", sketch artstyle, greyscale, monochrome, solo, (high quality), (best quality), masterpiece"
     standard_negative = " glasses----, (extra fingers), (fewer fingers), (low quality), (worst quality), (bad anatomy), (inaccurate limb), (ugly eyes), (inaccurate eyes), (extra digit), (fewer digits), (extra arms), (extra navel), blurred, (out of focus), soft, deformed, watermark, (movie poster), (large breasts), (censored), (mosaic censoring), (piercings), (multiple), error, cropped, (low res), artifacts, (compression artifacts), ugly, duplicate, morbid, mutilated, disfigured, gross, malformed, missing, username, signature, faded"
     compel = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
     return compel(prompt + standard_positive), compel(negative_prompt + standard_negative)
