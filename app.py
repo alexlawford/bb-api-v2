@@ -55,6 +55,9 @@ class Predict(Resource):
 
         # return result.json()
         return "Result!"
+    
+    def get(self):
+        return "GET REQ: hello world"
 
 api.add_resource(Predict, "/")
 
