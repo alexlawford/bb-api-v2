@@ -64,16 +64,14 @@ class Utilities:
     def prepare_background_image(
         self,
         image: Type[Image.Image],
-        width: int,
-        height: int,
-        device: int,
-        dtype,            
     ):
-        image = self.control_image_processor.preprocess(image, height=height, width=width).to(dtype=torch.float32)
+        image = torch.from_numpy(image).float() / 127.5 - 1
+        image = image.permute(2, 0, 1).unsqueeze(0).to("cuda")
+        image = image.half()
+        latents = self.vae.encode(image)["latent_dist"].mean
+        latents = latents * 0.18215
 
-        image = image.to(device=device, dtype=dtype)
-
-        return image
+        return latents
     
     def prepare_control_image(
         self,
