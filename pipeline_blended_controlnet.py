@@ -219,7 +219,18 @@ class BlendedControlNetPipeline(
                     progress_bar.update()
 
         # scale and decode the image latents with vae
-        image = self.decode_latents(latents, generator)
+        #  - - - - - - image = self.decode_latents(latents, generator)
+
+        latents = 1 / 0.18215 * latents
+
+        with torch.no_grad():
+            image = self.vae.decode(latents, generator).sample
+
+        # image = (image / 2 + 0.5).clamp(0, 1)
+        # image = image.detach().cpu().permute(0, 2, 3, 1).numpy()
+        # images = (image * 255).round().astype("uint8")
+
+        # return images
 
         # Conver to pil and return
         return convert_to_pil_image(image)
