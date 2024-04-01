@@ -80,20 +80,13 @@ def generate(layers_raw, variation):
 
         prompt_embeds, negative_prompt_embeds = generate_prompt_embeds(layer["prompt"], layer["negative_prompt"], pipe)
 
-        if i == 0:
-            l = Layer(
-                prompt_embeds=prompt_embeds,
-                negative_prompt_embeds=negative_prompt_embeds,
-            )
-        else:
-            l = Layer(
+        layers.append(Layer(
                 prompt_embeds=prompt_embeds,
                 negative_prompt_embeds=negative_prompt_embeds,
                 control_image=decode_base64_image(layer["control"]),
                 mask=decode_base64_image(layer["mask"]),
                 controlnet_name=layer["type"]
-            )
-        layers.append(l)
+        ))
     
     return execute_pipeline(layers, pipe, controlnets, "cuda", variation)
 
