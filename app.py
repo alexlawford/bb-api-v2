@@ -38,22 +38,23 @@ class Predict(Resource):
     def post(self):
         time_start = time.time()
 
-        req = request.json
-        layers=req.get("layers")
-        variation=req.get("variation")
+        # req = request.json
+        # layers=req.get("layers")
+        # variation=req.get("variation")
 
-        image = generate(layers, variation)
+        # image = generate(layers, variation)
 
-        with BytesIO() as image_binary:
-            image.save(image_binary, "png")
-            image_binary.seek(0)
-            result = saveBytescale(image_binary)
+        # with BytesIO() as image_binary:
+        #     image.save(image_binary, "png")
+        #     image_binary.seek(0)
+        #     result = saveBytescale(image_binary)
 
         # Show total time
         time_end = time.time()
         print("Total time:", time_end - time_start, "s")
 
-        return result.json()
+        # return result.json()
+        return "Result!"
 
 api.add_resource(Predict, "/")
 
