@@ -115,7 +115,7 @@ class BlendedControlNetPipeline(
 
                 # BG-image to latent space
                 latents = self.prepare_background_image(
-                    image=Image.open("background.png"),
+                    image=Image.open("./background.png"),
                     width=width,
                     height=height,
                     device=device,
