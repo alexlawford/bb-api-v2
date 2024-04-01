@@ -112,37 +112,45 @@ class BlendedControlNetPipeline(
                     device=device,
                     generator=generator
                 )
-                bg_latents = init_latents
-            else:
-                # Switch up controlnets
-                controlnet = controlnets[layer.controlnet_name]
-            
-                # Prepare mask
-                mask = self.prepare_mask(
-                    mask=layer.mask,
-                    dest_size=(width // 8, height // 8),
-                    device=device
-                )
 
-                # Prepare controlnet_conditioning_image
-                control_image = self.prepare_control_image(
-                    image=layer.control_image,
+                # BG-image to latent space
+                latents = self.prepare_background_image(
+                    image=Image.open("background.png"),
                     width=width,
                     height=height,
                     device=device,
-                    dtype=controlnet.dtype
+                    dtype=torch.float32
                 )
+                
+            # Switch up controlnets
+            controlnet = controlnets[layer.controlnet_name]
+        
+            # Prepare mask
+            mask = self.prepare_mask(
+                mask=layer.mask,
+                dest_size=(width // 8, height // 8),
+                device=device
+            )
 
-                # Create tensor stating which controlnets to keep
-                controlnet_keep = []
-                for i in range(len(timesteps)):
-                    keeps = [
-                        1.0 - float(i / len(timesteps) < s or (i + 1) / len(timesteps) > e)
-                        for s, e in zip(control_guidance_start, control_guidance_end)
-                    ]
-                    controlnet_keep.append(keeps[0])
+            # Prepare controlnet_conditioning_image
+            control_image = self.prepare_control_image(
+                image=layer.control_image,
+                width=width,
+                height=height,
+                device=device,
+                dtype=controlnet.dtype
+            )
 
-                bg_latents = latents
+            # Create tensor stating which controlnets to keep
+            controlnet_keep = []
+            for i in range(len(timesteps)):
+                keeps = [
+                    1.0 - float(i / len(timesteps) < s or (i + 1) / len(timesteps) > e)
+                    for s, e in zip(control_guidance_start, control_guidance_end)
+                ]
+                controlnet_keep.append(keeps[0])
+
+            bg_latents = latents
 
             # Optionally get Guidance Scale Embedding
             timestep_cond = None

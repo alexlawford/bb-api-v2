@@ -61,6 +61,20 @@ class Utilities:
 
         return prompt_embeds, negative_prompt_embeds
     
+    def prepare_background_image(
+        self,
+        image: Type[Image.Image],
+        width: int,
+        height: int,
+        device: int,
+        dtype,            
+    ):
+        image = self.control_image_processor.preprocess(image, height=height, width=width).to(dtype=torch.float32)
+
+        image = image.to(device=device, dtype=dtype)
+
+        return image
+    
     def prepare_control_image(
         self,
         image: Type[Image.Image],
@@ -69,19 +83,7 @@ class Utilities:
         device: int,
         dtype,
     ):
-        # batch_size = 1
-        # num_images_per_prompt = 1
-        # do_classifier_free_guidance = true,
-        # guess_mode=False,
-
         image = self.control_image_processor.preprocess(image, height=height, width=width).to(dtype=torch.float32)
-        # image_batch_size = image.shape[0]
-        # if image_batch_size == 1:
-        #     repeat_by = batch_size
-        # else:
-        #     # image batch size is the same as prompt batch size
-        #     repeat_by = num_images_per_prompt
-        # image = image.repeat_interleave(repeat_by, dim=0)
 
         image = image.to(device=device, dtype=dtype)
 
