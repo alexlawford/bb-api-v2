@@ -65,6 +65,8 @@ class Utilities:
         self,
         image: Type[Image.Image],
     ):
+        # image = image.resize((height, width), Image.BILINEAR)
+        image = np.array(image)[:, :, :3]
         image = torch.from_numpy(image).float() / 127.5 - 1
         image = image.permute(2, 0, 1).unsqueeze(0).to("cuda")
         image = image.half()
