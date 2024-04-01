@@ -169,49 +169,39 @@ class BlendedControlNetPipeline(
                     latent_model_input = torch.cat([latents] * 2)
                     latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
                     
-                    if layer_index != 0:
-                        # Infer controlnet
-                        control_model_input = latent_model_input
-                        controlnet_prompt_embeds = prompt_embeds
+                    # Infer controlnet
+                    control_model_input = latent_model_input
+                    controlnet_prompt_embeds = prompt_embeds
 
-                        if isinstance(controlnet_keep[i], list):
-                            cond_scale = [c * s for c, s in zip(controlnet_conditioning_scale, controlnet_keep[i])]
-                        else:
-                            controlnet_cond_scale = controlnet_conditioning_scale
-                            if isinstance(controlnet_cond_scale, list):
-                                controlnet_cond_scale = controlnet_cond_scale[0]
-                            cond_scale = controlnet_cond_scale * controlnet_keep[i]
-
-                        down_block_res_samples, mid_block_res_sample = controlnet(
-                            control_model_input,
-                            t,
-                            encoder_hidden_states=controlnet_prompt_embeds,
-                            controlnet_cond=control_image,
-                            conditioning_scale=cond_scale,
-                            guess_mode=False,
-                            return_dict=False,
-                        )
-
-                        # Predict the noise residual
-                        with torch.no_grad():
-                            noise_pred = self.unet(
-                                latent_model_input,
-                                t,
-                                encoder_hidden_states=prompt_embeds,
-                                timestep_cond=timestep_cond,
-                                down_block_additional_residuals=down_block_res_samples,
-                                mid_block_additional_residual=mid_block_res_sample,
-                                return_dict=False,
-                            )[0]
+                    if isinstance(controlnet_keep[i], list):
+                        cond_scale = [c * s for c, s in zip(controlnet_conditioning_scale, controlnet_keep[i])]
                     else:
-                        with torch.no_grad():
-                            noise_pred = self.unet(
-                                latent_model_input,
-                                t,
-                                encoder_hidden_states=prompt_embeds,
-                                timestep_cond=timestep_cond,
-                                return_dict=False,
-                            )[0]
+                        controlnet_cond_scale = controlnet_conditioning_scale
+                        if isinstance(controlnet_cond_scale, list):
+                            controlnet_cond_scale = controlnet_cond_scale[0]
+                        cond_scale = controlnet_cond_scale * controlnet_keep[i]
+
+                    down_block_res_samples, mid_block_res_sample = controlnet(
+                        control_model_input,
+                        t,
+                        encoder_hidden_states=controlnet_prompt_embeds,
+                        controlnet_cond=control_image,
+                        conditioning_scale=cond_scale,
+                        guess_mode=False,
+                        return_dict=False,
+                    )
+
+                    # Predict the noise residual
+                    with torch.no_grad():
+                        noise_pred = self.unet(
+                            latent_model_input,
+                            t,
+                            encoder_hidden_states=prompt_embeds,
+                            timestep_cond=timestep_cond,
+                            down_block_additional_residuals=down_block_res_samples,
+                            mid_block_additional_residual=mid_block_res_sample,
+                            return_dict=False,
+                        )[0]
 
                     # Peform Guidance
                     noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
@@ -221,7 +211,7 @@ class BlendedControlNetPipeline(
                     latents = self.scheduler.step(noise_pred, t, latents, return_dict=False)[0]
 
                     # Blend layers according to mask
-                    if layer_index != 0 and layer_index < (num_inference_steps - 5):
+                    if layer_index < (num_inference_steps - 5):
                         # Add noise to bg
                         ennoised_bg = self.scheduler.add_noise(
                             bg_latents, init_latents, t

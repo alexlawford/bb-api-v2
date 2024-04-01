@@ -1,5 +1,4 @@
 # In Built
-import platform
 from io import BytesIO
 import base64
 
@@ -7,7 +6,6 @@ import base64
 import torch
 from diffusers import ControlNetModel
 from compel import Compel
-from RealESRGAN import RealESRGAN
 from PIL import Image
 
 # Local
@@ -35,7 +33,7 @@ def generate_prompt_embeds(prompt, negative_prompt, pipe):
 def execute_pipeline(layers, pipe, controlnets, device, variation):
     generator = torch.Generator(device=device).manual_seed(variation)
 
-    image = pipe(
+    return pipe(
         layers=layers,
         controlnets=controlnets,
         generator=generator,
@@ -43,15 +41,6 @@ def execute_pipeline(layers, pipe, controlnets, device, variation):
         guidance_scale=8.0,
         controlnet_conditioning_scale=0.9
     )[0]
-
-    # Upscale & Enhance
-    upscaler = RealESRGAN(torch.device(device), scale=2)
-    upscaler.load_weights('weights/RealESRGAN_x2.pth', download=True)
-    scaled = upscaler.predict(image)
-    enhanced = enhance(scaled)
-    resized = enhanced.resize((512,512))
-
-    return resized
 
 def setup_pipe(device, torch_dtype):
     ## Weights
@@ -76,16 +65,16 @@ def generate(layers_raw, variation):
 
     layers = []
 
-    for i, layer in enumerate(layers_raw):
+    for layer in enumerate(layers_raw):
 
         prompt_embeds, negative_prompt_embeds = generate_prompt_embeds(layer["prompt"], layer["negative_prompt"], pipe)
 
         layers.append(Layer(
-                prompt_embeds=prompt_embeds,
-                negative_prompt_embeds=negative_prompt_embeds,
-                control_image=decode_base64_image(layer["control"]),
-                mask=decode_base64_image(layer["mask"]),
-                controlnet_name=layer["type"]
+            prompt_embeds=prompt_embeds,
+            negative_prompt_embeds=negative_prompt_embeds,
+            control_image=decode_base64_image(layer["control"]),
+            mask=decode_base64_image(layer["mask"]),
+            controlnet_name=layer["type"]
         ))
     
     return execute_pipeline(layers, pipe, controlnets, "cuda", variation)
