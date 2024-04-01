@@ -65,7 +65,7 @@ def generate(layers_raw, variation):
 
     layers = []
 
-    for layer in enumerate(layers_raw):
+    for _, layer in enumerate(layers_raw):
 
         prompt_embeds, negative_prompt_embeds = generate_prompt_embeds(layer["prompt"], layer["negative_prompt"], pipe)
 
